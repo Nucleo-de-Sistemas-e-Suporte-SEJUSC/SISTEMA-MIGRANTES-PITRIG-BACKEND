@@ -118,5 +118,4 @@ export class UsuariosService {
       throw error;
     }
   }
-  // --- FIM DO NOVO MÉTODO ---
 }
