@@ -23,7 +23,6 @@ export class AuthService {
     return null; // Retorna nulo se o usuário não for encontrado ou a senha estiver errada
   }
 
-  // 2. Geração do Token
   async login(usuario: any) {
     const payload = { sub: usuario.id, email: usuario.email }; // O que vai dentro do Token
     return {
