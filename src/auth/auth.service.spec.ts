@@ -6,13 +6,13 @@ import { JwtService } from '@nestjs/jwt'; // 2. IMPORTAR
 describe('AuthService', () => {
   let service: AuthService;
 
-  // 3. MOCK PARA USUARIOSSERVICE
+  // 3. Mock para o UsuariosService (CORRIGIDO)
   const mockUsuariosService = {
     findByEmail: jest.fn(),
     // Adicione outros métodos que o AuthService possa usar
   };
 
-  // 4. MOCK PARA JWTSERVICE
+  // 4. Mock para o JwtService (CORRIGIDO)
   const mockJwtService = {
     sign: jest.fn(),
     // Adicione outros métodos que o AuthService possa usar
