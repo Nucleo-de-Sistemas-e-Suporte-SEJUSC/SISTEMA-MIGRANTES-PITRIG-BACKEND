@@ -1,10 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common'; // 1. Importe forwardRef
 import { UsuariosService } from './usuarios.service';
-import { UsuariosController } from './usuarios.controller'; // <-- Verifique se ele importou
+import { UsuariosController } from './usuarios.controller';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import { AuthModule } from 'src/auth/auth.module'; // 2. Importe o AuthModule
 
 @Module({
-  controllers: [UsuariosController], // <-- Verifique se ele está aqui
+  imports: [
+    PrismaModule,
+    // 3. Envolva o AuthModule com forwardRef
+    forwardRef(() => AuthModule),
+  ],
+  controllers: [UsuariosController],
   providers: [UsuariosService],
-  exports: [UsuariosService], // Boa prática exportar o service
+  exports: [UsuariosService],
 })
 export class UsuariosModule {}

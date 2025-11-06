@@ -3,75 +3,69 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
-  ParseIntPipe, // Importante para validar os IDs da URL
+  ParseIntPipe,
+  Patch, // <-- 1. Importe o 'Patch' (ou 'Put')
+  Delete, // <-- 1. Importe o 'Delete'
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
-// import { Prisma } from '@prisma/client'; // <-- Não precisamos mais disto para o @Body
-import { CreateUsuarioDto } from './dto/create-usuario.dto'; // <-- 1. Importe o Create DTO
-import { UpdateUsuarioDto } from './dto/update-usuario.dto'; // <-- 2. Importe o Update DTO
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto'; // <-- 1. Importe o UpdateUsuarioDto
 
-@Controller('usuarios')
+@Controller('usuarios') // Rota base: /usuarios
 export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
-
+@Post()
+  create(@Body() createUsuarioDto: CreateUsuarioDto) {
+    // Mude o nome do método aqui:
+    return this.usuariosService.criarUsuario(createUsuarioDto);
+  }
   /**
-   * Rota para criar um novo usuário.
-   * POST /usuarios
+   * Rota: POST /usuarios
    */
   @Post()
-  criarUsuario(
-    @Body() createUsuarioDto: CreateUsuarioDto, // <-- 3. Use o DTO aqui
-  ) {
-    // Se a requisição chegar aqui, os dados em 'createUsuarioDto'
-    // já foram validados pelo ValidationPipe!
-    // (Ex: e-mail válido, senha com min. 6 caracteres)
+  criar(@Body() createUsuarioDto: CreateUsuarioDto) {
+    // <-- 2. Rota POST atualizada para chamar 'criarUsuario'
     return this.usuariosService.criarUsuario(createUsuarioDto);
   }
 
   /**
-   * Rota para listar todos os usuários.
-   * GET /usuarios
+   * Rota: GET /usuarios
    */
   @Get()
-  listarUsuarios() {
+  listarTodos() {
+    // <-- 3. Rota GET (todos) atualizada para chamar 'listarUsuarios'
     return this.usuariosService.listarUsuarios();
   }
 
   /**
-   * Rota para buscar um usuário pelo ID.
-   * GET /usuarios/:id
+   * Rota: GET /usuarios/1 (ou /2, /3, etc.)
    */
   @Get(':id')
-  buscarUsuario(
-    @Param('id', ParseIntPipe) id: number, // Valida que o ID é um número
-  ) {
+  buscarUm(@Param('id', ParseIntPipe) id: number) {
+    // <-- 4. Rota GET (um) atualizada para chamar 'buscarUsuario'
     return this.usuariosService.buscarUsuario(id);
   }
 
   /**
-   * Rota para atualizar um usuário pelo ID.
-   * PATCH /usuarios/:id
+   * Rota: PATCH /usuarios/1 (ou /2, /3, etc.)
+   * Usamos PATCH para atualização parcial. Se fosse PUT,
+   * idealmente esperaria o DTO completo.
    */
   @Patch(':id')
-  atualizarUsuario(
-    @Param('id', ParseIntPipe) id: number, // Valida o ID
-    @Body() updateUsuarioDto: UpdateUsuarioDto, // <-- 4. Use o DTO aqui
+  atualizar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUsuarioDto: UpdateUsuarioDto,
   ) {
-    // 'updateUsuarioDto' também é validado (campos opcionais)
+    // <-- 5. NOVA ROTA: PATCH para atualizar
     return this.usuariosService.atualizarUsuario(id, updateUsuarioDto);
   }
 
   /**
-   * Rota para deletar um usuário pelo ID.
-   * DELETE /usuarios/:id
+   * Rota: DELETE /usuarios/1 (ou /2, /3, etc.)
    */
   @Delete(':id')
-  deletarUsuario(
-    @Param('id', ParseIntPipe) id: number, // Valida o ID
-  ) {
+  deletar(@Param('id', ParseIntPipe) id: number) {
     return this.usuariosService.deletarUsuario(id);
   }
 }

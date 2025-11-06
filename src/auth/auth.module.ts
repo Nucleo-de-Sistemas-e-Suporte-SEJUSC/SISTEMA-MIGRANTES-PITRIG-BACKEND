@@ -1,20 +1,23 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common'; // 1. Importe forwardRef
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UsuariosModule } from '../usuarios/usuarios.module';
-import { PassportModule } from '@nestjs/passport';
+import { UsuariosModule } from 'src/usuarios/usuarios.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    UsuariosModule, // Para termos acesso ao UsuariosService
-    PassportModule,
+    // 2. Envolva o UsuariosModule com forwardRef
+    forwardRef(() => UsuariosModule),
+
     JwtModule.register({
-      secret: 'SEU_SEGREDO_SUPER_SECRETO', // Mude isso! Coloque no .env depois
-      signOptions: { expiresIn: '60m' }, // Token expira em 60 minutos
+      global: true,
+      secret: 'SEU_SEGREDO_SUPER_SECRETO_AQUI',
+      signOptions: { expiresIn: '1d' },
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService], // Precisamos adicionar as "Estratégias" aqui depois
+  providers: [AuthService],
+  // 3. Se o UsuariosModule precisar usar o AuthService, exporte-o
+  exports: [AuthService],
 })
 export class AuthModule {}
