@@ -5,13 +5,15 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsuariosModule } from './usuarios/usuarios.module'; // <-- Importe aqui
 import { AuthModule } from './auth/auth.module';
 import { AgendamentosModule } from './agendamentos/agendamentos.module';
+import { MigrantesModule } from './migrantes/migrantes.module';
 
 @Module({
   imports: [
     PrismaModule,
     UsuariosModule,
     AuthModule,
-    AgendamentosModule, // <-- Adicione na lista de imports
+    AgendamentosModule,
+    MigrantesModule, // <-- Adicione na lista de imports
   ],
   controllers: [AppController],
   providers: [AppService],
