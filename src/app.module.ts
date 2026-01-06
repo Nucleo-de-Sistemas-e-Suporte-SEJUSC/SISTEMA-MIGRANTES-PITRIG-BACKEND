@@ -6,6 +6,7 @@ import { UsuariosModule } from './usuarios/usuarios.module'; // <-- Importe aqui
 import { AuthModule } from './auth/auth.module';
 import { AgendamentosModule } from './agendamentos/agendamentos.module';
 import { MigrantesModule } from './migrantes/migrantes.module';
+import { GruposFamiliaresModule } from './grupos-familiares/grupos-familiares.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { MigrantesModule } from './migrantes/migrantes.module';
     UsuariosModule,
     AuthModule,
     AgendamentosModule,
-    MigrantesModule, // <-- Adicione na lista de imports
+    MigrantesModule,
+    GruposFamiliaresModule, // <-- Adicione na lista de imports
   ],
   controllers: [AppController],
   providers: [AppService],
