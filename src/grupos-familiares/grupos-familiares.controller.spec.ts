@@ -9,7 +9,9 @@ describe('GruposFamiliaresController', () => {
       controllers: [GruposFamiliaresController],
     }).compile();
 
-    controller = module.get<GruposFamiliaresController>(GruposFamiliaresController);
+    controller = module.get<GruposFamiliaresController>(
+      GruposFamiliaresController,
+    );
   });
 
   it('should be defined', () => {

@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { AgendamentosModule } from './agendamentos/agendamentos.module';
 import { MigrantesModule } from './migrantes/migrantes.module';
 import { GruposFamiliaresModule } from './grupos-familiares/grupos-familiares.module';
+import { AtendimentosModule } from './atendimentos/atendimentos.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { GruposFamiliaresModule } from './grupos-familiares/grupos-familiares.mo
     AuthModule,
     AgendamentosModule,
     MigrantesModule,
-    GruposFamiliaresModule, // <-- Adicione na lista de imports
+    GruposFamiliaresModule,
+    AtendimentosModule, // <-- Adicione na lista de imports
   ],
   controllers: [AppController],
   providers: [AppService],

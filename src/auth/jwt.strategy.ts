@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UsuariosService } from 'src/usuarios/usuarios.service';
+import { UsuariosService } from '../usuarios/usuarios.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -9,21 +9,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'SEU_SEGREDO_SUPER_SECRETO_AQUI', // !! USE O MESMO SEGREDO DO auth.module !!
+      secretOrKey: 'SEGREDO_SUPER_SECRETO', // Certifique-se que bate com o AuthModule
     });
   }
 
-  // Este método é chamado pelo NestJS após validar o token
   async validate(payload: any) {
-    // 'payload.sub' deve ser o ID do usuário que você colocou no token
-    const usuario = await this.usuariosService.buscarUsuario(payload.sub); 
-
+    const usuario = await this.usuariosService.findOne(payload.sub);
+    
     if (!usuario) {
-      throw new UnauthorizedException('Token inválido ou usuário não existe.');
+      throw new UnauthorizedException('Usuário não encontrado ou token inválido.');
     }
-
-    // O objeto 'usuario' retornado aqui será injetado no @Req()
-    // das suas rotas protegidas.
     return usuario;
   }
 }
