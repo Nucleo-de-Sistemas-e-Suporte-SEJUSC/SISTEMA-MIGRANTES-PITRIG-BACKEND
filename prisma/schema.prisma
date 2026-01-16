@@ -17,12 +17,6 @@ model Usuario {
   atendimentosFeitos Atendimento[] @relation("Atendente")
 }
 
-enum Role {
-  ATENDENTE
-  GESTOR
-  ADMIN
-}
-
 model Migrante {
   id                 Int            @id @default(autoincrement())
   nomeCompleto       String         @map("nome_completo")
@@ -38,18 +32,20 @@ model Migrante {
   pontoEntradaBrasil String         @map("ponto_entrada_brasil")
   bairro             String?
   contato            String?
-  atendimentos       Atendimento[]
   grupoFamiliarId    Int?
-  grupoFamiliar      GrupoFamiliar? @relation(fields: [grupoFamiliarId], references: [id])
   criadoEm           DateTime       @default(now()) @map("criado_em")
   atualizadoEm       DateTime       @updatedAt @map("atualizado_em")
+  atendimentos       Atendimento[]
+  grupoFamiliar      GrupoFamiliar? @relation(fields: [grupoFamiliarId], references: [id])
+
+  @@index([grupoFamiliarId], map: "Migrante_grupoFamiliarId_fkey")
 }
 
 model GrupoFamiliar {
   id           Int        @id @default(autoincrement())
   numeroGrupo  String     @unique @map("numero_grupo_familiar")
-  membros      Migrante[]
   pontoFocalId Int?
+  membros      Migrante[]
 }
 
 model Atendimento {
@@ -62,10 +58,13 @@ model Atendimento {
   observacao             String?
   assistenciaEntreguePor String   @map("assistencia_entregue_por")
   migranteId             Int
-  migrante               Migrante @relation(fields: [migranteId], references: [id])
   atendenteId            Int
-  atendente              Usuario  @relation("Atendente", fields: [atendenteId], references: [id])
   criadoEm               DateTime @default(now()) @map("criado_em")
+  atendente              Usuario  @relation("Atendente", fields: [atendenteId], references: [id])
+  migrante               Migrante @relation(fields: [migranteId], references: [id])
+
+  @@index([atendenteId], map: "Atendimento_atendenteId_fkey")
+  @@index([migranteId], map: "Atendimento_migranteId_fkey")
 }
 
 model Agendamento {
@@ -76,4 +75,10 @@ model Agendamento {
   contato           String?
   infoGrupoFamiliar String?  @map("info_grupo_familiar")
   criadoEm          DateTime @default(now()) @map("criado_em")
+}
+
+enum Role {
+  ATENDENTE
+  GESTOR
+  ADMIN
 }

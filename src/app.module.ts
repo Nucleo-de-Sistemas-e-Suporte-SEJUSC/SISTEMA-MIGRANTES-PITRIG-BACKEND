@@ -8,6 +8,7 @@ import { AgendamentosModule } from './agendamentos/agendamentos.module';
 import { MigrantesModule } from './migrantes/migrantes.module';
 import { GruposFamiliaresModule } from './grupos-familiares/grupos-familiares.module';
 import { AtendimentosModule } from './atendimentos/atendimentos.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { AtendimentosModule } from './atendimentos/atendimentos.module';
     AgendamentosModule,
     MigrantesModule,
     GruposFamiliaresModule,
-    AtendimentosModule, // <-- Adicione na lista de imports
+    AtendimentosModule,
+    DashboardModule, // <-- Adicione na lista de imports
   ],
   controllers: [AppController],
   providers: [AppService],
