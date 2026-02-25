@@ -12,7 +12,7 @@ import { JwtStrategy } from './jwt.strategy'; // 2. IMPORTE A ESTRATÉGIA
     PassportModule.register({ defaultStrategy: 'jwt' }), // 3. ADICIONE O PASSPORTMODULE
     JwtModule.register({
       global: true,
-      secret: 'SEU_SEGREDO_SUPER_SECRETO_AQUI', // !! Use o mesmo segredo do jwt.strategy !!
+      secret: 'pitrig_secret_2024', // !! Use o mesmo segredo do jwt.strategy !!
       signOptions: { expiresIn: '1d' },
     }),
   ],

@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { MigrantesService } from './migrantes.service';
 import { CreateMigranteDto } from './dto/create-migrante.dto';
+import { UpdateMigranteDto } from './dto/update-migrante.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @UseGuards(AuthGuard('jwt')) //  Protege TUDO com Token
@@ -21,6 +22,14 @@ export class MigrantesController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.migrantesService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateMigranteDto: UpdateMigranteDto,
+  ) {
+    return this.migrantesService.update(id, updateMigranteDto);
   }
 
   @Delete(':id')
