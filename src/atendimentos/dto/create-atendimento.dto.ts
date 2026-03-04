@@ -3,7 +3,7 @@ import { IsBoolean, IsDateString, IsInt, IsNotEmpty, IsOptional, IsString } from
 export class CreateAtendimentoDto {
   @IsDateString()
   @IsNotEmpty()
-  dataAtendimento: Date; // Formato ISO: "2025-10-20T14:00:00.000Z"
+  dataAtendimento: Date;
 
   @IsString()
   @IsNotEmpty()
@@ -11,7 +11,7 @@ export class CreateAtendimentoDto {
 
   @IsString()
   @IsNotEmpty()
-  tipoAssistencia: string; // Ex: "Alimentação", "Jurídico"
+  tipoAssistencia: string;
 
   @IsBoolean()
   @IsNotEmpty()
@@ -26,14 +26,26 @@ export class CreateAtendimentoDto {
   observacao?: string;
 
   @IsString()
+  @IsOptional()
+  encaminhamentos?: string;
+
+  @IsString()
+  @IsOptional()
+  observacoesEncaminhamentos?: string;
+
+  @IsString()
   @IsNotEmpty()
-  assistenciaEntreguePor: string; // Nome de quem entregou
+  assistenciaEntreguePor: string;
+
+  @IsString()
+  @IsOptional()
+  atualizadoPor?: string;
 
   @IsInt()
   @IsNotEmpty()
-  migranteId: number; // Quem recebeu (ID do Migrante)
+  migranteId: number;
 
   @IsInt()
   @IsNotEmpty()
-  atendenteId: number; // Quem registrou (ID do Usuário)
+  atendenteId: number;
 }

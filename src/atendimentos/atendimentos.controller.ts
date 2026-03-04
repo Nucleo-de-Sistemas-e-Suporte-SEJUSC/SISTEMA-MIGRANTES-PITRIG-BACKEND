@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AtendimentosService } from './atendimentos.service';
 import { CreateAtendimentoDto } from './dto/create-atendimento.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt')) // 🔒 Protegido
+@UseGuards(AuthGuard('jwt'))
 @Controller('atendimentos')
 export class AtendimentosController {
   constructor(private readonly atendimentosService: AtendimentosService) {}
@@ -16,5 +16,18 @@ export class AtendimentosController {
   @Get()
   findAll() {
     return this.atendimentosService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.atendimentosService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: Partial<CreateAtendimentoDto>,
+  ) {
+    return this.atendimentosService.update(id, dto);
   }
 }

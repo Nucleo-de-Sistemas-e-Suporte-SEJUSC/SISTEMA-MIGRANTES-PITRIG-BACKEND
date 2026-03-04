@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAtendimentoDto } from './dto/create-atendimento.dto';
 
@@ -10,20 +10,50 @@ export class AtendimentosService {
   create(dto: CreateAtendimentoDto) {
     return this.prisma.atendimento.create({
       data: {
-        dataAtendimento: dto.dataAtendimento,
-        localAtendimento: dto.localAtendimento,
-        tipoAssistencia: dto.tipoAssistencia,
-        consentimento: dto.consentimento,
-        prioridades: dto.prioridades,
-        observacao: dto.observacao,
-        assistenciaEntreguePor: dto.assistenciaEntreguePor,
-        migranteId: dto.migranteId,
-        atendenteId: dto.atendenteId,
+        dataAtendimento:           dto.dataAtendimento,
+        localAtendimento:          dto.localAtendimento,
+        tipoAssistencia:           dto.tipoAssistencia,
+        consentimento:             dto.consentimento,
+        prioridades:               dto.prioridades,
+        observacao:                dto.observacao,
+        encaminhamentos:           dto.encaminhamentos,
+        observacoesEncaminhamentos: dto.observacoesEncaminhamentos,
+        assistenciaEntreguePor:    dto.assistenciaEntreguePor,
+        atualizadoPor:             dto.atualizadoPor,
+        migranteId:                dto.migranteId,
+        atendenteId:               dto.atendenteId,
       },
     });
   }
 
-  // 2. Listar Todos (Com nomes!)
+  // 2. Buscar por ID
+  async findOne(id: number) {
+    const atendimento = await this.prisma.atendimento.findUnique({ where: { id } });
+    if (!atendimento) throw new NotFoundException(`Atendimento #${id} não encontrado.`);
+    return atendimento;
+  }
+
+  // 3. Atualizar parcialmente (somente campos do Atendimento)
+  async update(id: number, dto: Partial<CreateAtendimentoDto>) {
+    await this.findOne(id);
+    return this.prisma.atendimento.update({
+      where: { id },
+      data: {
+        ...(dto.dataAtendimento            !== undefined && { dataAtendimento:           dto.dataAtendimento            }),
+        ...(dto.localAtendimento           !== undefined && { localAtendimento:          dto.localAtendimento           }),
+        ...(dto.tipoAssistencia            !== undefined && { tipoAssistencia:           dto.tipoAssistencia            }),
+        ...(dto.consentimento              !== undefined && { consentimento:             dto.consentimento              }),
+        ...(dto.prioridades                !== undefined && { prioridades:               dto.prioridades                }),
+        ...(dto.observacao                 !== undefined && { observacao:                dto.observacao                 }),
+        ...(dto.encaminhamentos            !== undefined && { encaminhamentos:           dto.encaminhamentos            }),
+        ...(dto.observacoesEncaminhamentos !== undefined && { observacoesEncaminhamentos: dto.observacoesEncaminhamentos }),
+        ...(dto.assistenciaEntreguePor     !== undefined && { assistenciaEntreguePor:    dto.assistenciaEntreguePor     }),
+        ...(dto.atualizadoPor              !== undefined && { atualizadoPor:             dto.atualizadoPor              }),
+      },
+    });
+  }
+
+  // 4. Listar Todos
   findAll() {
     return this.prisma.atendimento.findMany({
       include: {
@@ -34,7 +64,7 @@ export class AtendimentosService {
           select: { nome: true },
         },
       },
-      orderBy: { dataAtendimento: 'desc' }, // Mais recentes primeiro
+      orderBy: { dataAtendimento: 'desc' },
     });
   }
 }

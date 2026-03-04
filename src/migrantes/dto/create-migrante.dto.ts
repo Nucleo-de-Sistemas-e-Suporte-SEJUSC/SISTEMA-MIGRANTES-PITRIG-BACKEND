@@ -53,6 +53,34 @@ export class CreateMigranteDto {
   @IsOptional()
   contato?: string;
 
+  @IsString()
+  @IsOptional()
+  municipioResidencia?: string;
+
+  @IsString()
+  @IsOptional()
+  profissao?: string;
+
+  @IsString()
+  @IsOptional()
+  composicaoFamiliar?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isChefeFamilia?: boolean;
+
+  @IsString()
+  @IsOptional()
+  escolaridade?: string;
+
+  @IsString()
+  @IsOptional()
+  crnm?: string;
+
+  @IsDateString()
+  @IsOptional()
+  validadeCrnm?: Date;
+
   @IsOptional()
   grupoFamiliarId?: number;
 }

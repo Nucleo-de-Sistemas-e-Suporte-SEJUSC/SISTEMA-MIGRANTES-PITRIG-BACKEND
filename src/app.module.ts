@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config'; // 👈 ADICIONA ISSO
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { UsuariosModule } from './usuarios/usuarios.module'; // <-- Importe aqui
+import { UsuariosModule } from './usuarios/usuarios.module';
 import { AuthModule } from './auth/auth.module';
 import { AgendamentosModule } from './agendamentos/agendamentos.module';
 import { MigrantesModule } from './migrantes/migrantes.module';
@@ -12,6 +14,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // 👈 ESSENCIAL
+    }),
+
     PrismaModule,
     UsuariosModule,
     AuthModule,
@@ -19,7 +25,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     MigrantesModule,
     GruposFamiliaresModule,
     AtendimentosModule,
-    DashboardModule, // <-- Adicione na lista de imports
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
