@@ -1,0 +1,16 @@
+-- Adiciona campos faltantes no Migrante
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `crnm` VARCHAR(191) NULL;
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `escolaridade` VARCHAR(191) NULL;
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `composicao_familiar` VARCHAR(191) NULL;
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `is_chefe_familia` BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `municipio_residencia` VARCHAR(191) NULL;
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `profissao` VARCHAR(191) NULL;
+ALTER TABLE `Migrante` ADD COLUMN IF NOT EXISTS `validade_crnm` DATETIME(3) NULL;
+
+-- Adiciona campos faltantes no Atendimento
+ALTER TABLE `Atendimento` ADD COLUMN IF NOT EXISTS `prioridades` TEXT NULL;
+ALTER TABLE `Atendimento` ADD COLUMN IF NOT EXISTS `observacao` TEXT NULL;
+ALTER TABLE `Atendimento` ADD COLUMN IF NOT EXISTS `encaminhamentos` TEXT NULL;
+ALTER TABLE `Atendimento` ADD COLUMN IF NOT EXISTS `observacoes_encaminhamentos` TEXT NULL;
+ALTER TABLE `Atendimento` ADD COLUMN IF NOT EXISTS `atualizado_por` VARCHAR(191) NULL;
+ALTER TABLE `Atendimento` ADD COLUMN IF NOT EXISTS `atualizado_em` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3);

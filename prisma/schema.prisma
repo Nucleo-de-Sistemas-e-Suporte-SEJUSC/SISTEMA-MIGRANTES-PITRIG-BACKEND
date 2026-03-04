@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                 Int           @id @default(autoincrement())
+  nome               String
+  email              String        @unique
+  senha              String
+  criadoEm           DateTime      @default(now()) @map("criado_em")
+  role               Role          @default(ATENDENTE)
+  atendimentosFeitos Atendimento[] @relation("Atendente")
+}
+
+model Migrante {
+  id                  Int            @id @default(autoincrement())
+  nomeCompleto        String         @map("nome_completo")
+  dataNascimento      DateTime       @map("data_nascimento")
+  sexo                String
+  nacionalidade       String
+  paisOrigem          String         @map("pais_de_origem")
+  statusLegal         String         @map("status_legal")
+  etnia               String
+  cpf                 String?        @unique
+  temDeficiencia      Boolean        @default(false) @map("tem_deficiencia")
+  dataEntradaBrasil   DateTime       @map("data_entrada_brasil")
+  pontoEntradaBrasil  String         @map("ponto_entrada_brasil")
+  bairro              String?
+  contato             String?
+  grupoFamiliarId     Int?
+  criadoEm            DateTime       @default(now()) @map("criado_em")
+  atualizadoEm        DateTime       @updatedAt @map("atualizado_em")
+  crnm                String?
+  escolaridade        String?
+  composicaoFamiliar  String?        @map("composicao_familiar")
+  isChefeFamilia      Boolean        @default(false) @map("is_chefe_familia")
+  municipioResidencia String?        @map("municipio_residencia")
+  profissao           String?
+  validadeCrnm        DateTime?      @map("validade_crnm")
+  atendimentos        Atendimento[]
+  grupoFamiliar       GrupoFamiliar? @relation(fields: [grupoFamiliarId], references: [id])
+
+  @@index([grupoFamiliarId], map: "Migrante_grupoFamiliarId_fkey")
+}
+
+model GrupoFamiliar {
+  id           Int        @id @default(autoincrement())
+  numeroGrupo  String     @unique @map("numero_grupo_familiar")
+  pontoFocalId Int?
+  membros      Migrante[]
+}
+
+model Atendimento {
+  id                         Int      @id @default(autoincrement())
+  dataAtendimento            DateTime @map("data_atendimento")
+  localAtendimento           String   @map("local_atendimento")
+  tipoAssistencia            String   @map("tipo_assistencia")
+  consentimento              Boolean
+  prioridades                String?  @db.Text
+  observacao                 String?  @db.Text
+  encaminhamentos            String?  @db.Text
+  observacoesEncaminhamentos String?  @map("observacoes_encaminhamentos") @db.Text
+  assistenciaEntreguePor     String   @map("assistencia_entregue_por")
+  atualizadoPor              String?  @map("atualizado_por")
+  migranteId                 Int
+  atendenteId                Int
+  criadoEm                   DateTime @default(now()) @map("criado_em")
+  atualizadoEm               DateTime @updatedAt @map("atualizado_em")
+  atendente                  Usuario  @relation("Atendente", fields: [atendenteId], references: [id])
+  migrante                   Migrante @relation(fields: [migranteId], references: [id])
+
+  @@index([atendenteId], map: "Atendimento_atendenteId_fkey")
+  @@index([migranteId], map: "Atendimento_migranteId_fkey")
+}
+
+model Agendamento {
+  id                Int      @id @default(autoincrement())
+  dataAgendamento   DateTime @map("data_agendamento")
+  status            String   @default("PENDENTE")
+  nome              String?
+  contato           String?
+  infoGrupoFamiliar String?  @map("info_grupo_familiar")
+  criadoEm          DateTime @default(now()) @map("criado_em")
+}
+
+enum Role {
+  ATENDENTE
+  GESTOR
+  ADMIN
+}
